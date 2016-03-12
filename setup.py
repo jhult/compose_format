@@ -2,11 +2,11 @@ from setuptools import setup
 
 
 def readme():
-    with open('README.md') as file:
+    with open('README.rst') as file:
         return file.read()
 
 setup(name='compose_format',
-      version='0.1.0',
+      version='0.1.1',
       description='format docker compose files',
       long_description=readme(),
       url='http://github.com/funkwerk/compose_format',

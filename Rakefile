@@ -5,7 +5,8 @@ task :test do
   sh "PYTHONPATH=#{File.expand_path '.'}:$PYTHONPATH cucumber"
 end
 
-desc 'Publishes the Gem'
+desc 'Publishes the PyPi'
+task push: :generate
 task :push do
   sh 'python3 setup.py sdist upload'
 end
@@ -23,4 +24,8 @@ end
 desc 'Checks ruby style'
 task :rubocop do
   sh 'rubocop'
+end
+
+task :generate do
+  sh 'pandoc --from=markdown --to=rst --output=README.rst README.md'
 end
