@@ -7,7 +7,7 @@ end
 
 desc 'Publishes the Gem'
 task :push do
-  # TODO: Build the docker container and or the python-pip
+  sh 'python3 setup.py sdist upload'
 end
 
 desc 'Checks style'
