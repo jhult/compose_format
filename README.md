@@ -11,6 +11,8 @@ Currently docker-compose just support the "config" switch. Which joins multiple 
 Install it via:
 `pip3 install compose_format`
 
+### Via Docker
+
 After that use it like:
 `echo "docker-compose.yml" > docker run -t compose_format`
 
