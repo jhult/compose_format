@@ -4,4 +4,9 @@ python:
   - "3.4"
   - "3.5"
   - "3.5-dev"
+before_install:
+ - sudo apt-get update
+ - sudo apt-get install rake ruby-aruba ruby
+ - sudo gem install rubocop --no-format-exec
 install: "pip install pyaml flake8 pylint"
+script: "rake test"
