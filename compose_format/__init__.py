@@ -25,6 +25,16 @@ class ComposeFormat:
         with open(path, 'r') as file:
             data = file.read()
         original = data
+        formatted = self.format_string(data, replace=replace)
+
+        if replace:
+            with open(path, 'w') as file:
+                file.write(formatted)
+        else:
+            print(formatted)
+        return original == formatted
+
+    def format_string(self, data, replace=False):
         data = self.reorder(load(data))
 
         def is_legacy_version(data):
@@ -35,14 +45,7 @@ class ComposeFormat:
         vspacing = [1, 0] if is_legacy_version(data) else [0, 1, 0]
 
         formatted = pyaml.dump(data, vspacing=vspacing, indent=2, width=120, string_val_style='plain')
-        formatted = formatted.strip() + '\n'
-
-        if replace:
-            with open(path, 'w') as file:
-                file.write(formatted)
-        else:
-            print(formatted)
-        return original == formatted
+        return formatted.strip() + '\n'
 
     @staticmethod
     def reorder(data):

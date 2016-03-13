@@ -29,3 +29,7 @@ end
 task :generate do
   sh 'pandoc --from=markdown --to=rst --output=README.rst README.md'
 end
+
+task :docker do
+  sh 'docker build --tag=funkwerk/compose_format  .'
+end

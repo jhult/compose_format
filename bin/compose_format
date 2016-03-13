@@ -5,6 +5,7 @@ from compose_format import ComposeFormat
 if __name__ == '__main__':
 
     import argparse
+    import sys
 
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -15,12 +16,17 @@ if __name__ == '__main__':
         help='ignore changes for return code', default=True)
     parser.add_argument('files', nargs=argparse.REMAINDER)
     args = parser.parse_args()
-    if len(args.files) == 0:
-        import sys
-        print('specify at least one file')
-        sys.exit(1)
-
     formatter = ComposeFormat()
+
+    if len(args.files) == 0:
+        assert args.replace is False, 'replace makes no sense when reading from stdin'
+
+        data = sys.stdin.read()
+        formatted = formatter.format_string(data)
+        print(formatted)
+        if not args.ignore_changes:
+            if data != formatted:
+                sys.exit(1)
 
     for path in args.files:
         if not formatter.format(path, args.replace):
