@@ -3,11 +3,9 @@ MAINTAINER think@hotmail.de
 
 RUN pip install pyaml
 
-ADD bin /bin
+COPY bin /bin
 COPY compose_format /usr/local/lib/python3.5/site-packages/compose_format
-ADD features /
-ADD Dockerfile /
-ADD README.md /
+COPY ["features/*.feature", "Dockerfile", "README.md", "/"]
 
 RUN chmod +x /bin/compose_format
 
