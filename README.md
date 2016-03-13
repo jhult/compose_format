@@ -1,5 +1,10 @@
 # compose_format
 
+[![Build Status](https://travis-ci.org/funkwerk/compose_format.svg)](https://travis-ci.org/funkwerk/compose_format)
+[![](https://badge.imagelayers.io/funkwerk/compose_format.svg)](https://imagelayers.io/?images=funkwerk/compose_format:latest 'funkwerk/compose_format')
+[![PyPi Downloads](https://img.shields.io/pypi/dm/compose_format.svg)]
+[![PyPi Version](https://img.shields.io/pypi/v/compose_format.svg)]
+[![Docker pulls](https://img.shields.io/docker/pulls/funkwerk/compose_format.svg)]
 Format docker-compose files.
 
 Note that this small utility is just valid until docker-compose has itself a format functionality.
