@@ -1,8 +1,8 @@
 [![Build Status](https://travis-ci.org/funkwerk/compose_format.svg)](https://travis-ci.org/funkwerk/compose_format)
 [![](https://badge.imagelayers.io/funkwerk/compose_format.svg)](https://imagelayers.io/?images=funkwerk/compose_format:latest 'funkwerk/compose_format')
-[!(https://img.shields.io/pypi/dm/compose_format.svg)]
-[!(https://img.shields.io/pypi/v/compose_format.svg)]
-[!(https://img.shields.io/docker/pulls/funkwerk/compose_format.svg)]
+[![](https://img.shields.io/pypi/dm/compose_format.svg)]
+[![](https://img.shields.io/pypi/v/compose_format.svg)]
+[![](https://img.shields.io/docker/pulls/funkwerk/compose_format.svg)]
 # compose_format
 
 Format docker-compose files.
