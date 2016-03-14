@@ -14,6 +14,9 @@ if __name__ == '__main__':
     parser.add_argument(
         '--ignore_changes', action='store_const', const=False,
         help='ignore changes for return code', default=True)
+    parser.add_argument(
+        '--non_strict', action='store_const', const=True,
+        help='if this is provided, unknown keys errors are ignored', default=False)
     parser.add_argument('files', nargs=argparse.REMAINDER)
     args = parser.parse_args()
     formatter = ComposeFormat()
@@ -22,14 +25,14 @@ if __name__ == '__main__':
         assert args.replace is False, 'replace makes no sense when reading from stdin'
 
         data = sys.stdin.read()
-        formatted = formatter.format_string(data)
+        formatted = formatter.format_string(data, strict=not args.non_strict)
         print(formatted)
         if not args.ignore_changes:
             if data != formatted:
                 sys.exit(1)
 
     for path in args.files:
-        if not formatter.format(path, args.replace):
+        if not formatter.format(path, replace=args.replace, strict=not args.non_strict):
             if args.replace:
                 print('path {} has been changed'.format(path))
             if not args.ignore_changes:

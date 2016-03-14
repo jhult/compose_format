@@ -7,7 +7,7 @@ def readme():
 
 setup(
     name='compose_format',
-    version='0.1.4',
+    version='0.1.5',
     description='format docker-compose files',
     long_description=readme(),
     url='http://github.com/funkwerk/compose_format',

@@ -7,10 +7,24 @@ from yaml import load
 class ComposeFormat:
     TOPLEVEL_ORDER = ['version', 'services', 'volumes', 'networks']
     SERVICE_ORDER = [
-        'image', 'command', 'links',
-        'volumes_from', 'volumes', 'expose', 'ports',
-        'extra_hosts', 'restart', 'ulimits', 'tty']
-    BUILD_ORDER = ['context', 'dockerfile']
+        'image', 'command', 'entrypoint', 'container_name',
+        'links', 'volumes_from', 'volumes', 'volume_driver',
+        'build',
+        'expose', 'ports',
+        'net', 'network_mode', 'networks',
+        'labels',
+        'devices',
+        'read_only',
+        'env_file', 'environment',
+        'cpu_shares', 'cpu_quota', 'cpuset', 'domainname', 'hostname', 'ipc',
+        'mac_address', 'mem_limit', 'memswap_limit', 'privileged',
+        'depends_on', 'extends', 'external_links',
+        'stdin_open', 'user', 'working_dir',
+        'extra_hosts', 'restart', 'ulimits', 'tty', 'dns', 'dns_search', 'pid',
+        'security_opt', 'cap_add', 'cap_drop', 'cgroup_parent', 'logging', 'log_driver', 'log_opt',
+        'stopsignal',
+    ]
+    BUILD_ORDER = ['context', 'dockerfile', 'args']
 
     ORDERS = {
         'version': TOPLEVEL_ORDER,
@@ -21,11 +35,11 @@ class ComposeFormat:
     def __init__(self):
         pass
 
-    def format(self, path, replace=False):
+    def format(self, path, replace=False, strict=True):
         with open(path, 'r') as file:
             data = file.read()
         original = data
-        formatted = self.format_string(data, replace=replace)
+        formatted = self.format_string(data, replace=replace, strict=strict)
 
         if replace:
             with open(path, 'w') as file:
@@ -34,8 +48,8 @@ class ComposeFormat:
             print(formatted)
         return original == formatted
 
-    def format_string(self, data, replace=False):
-        data = self.reorder(load(data))
+    def format_string(self, data, replace=False, strict=True):
+        data = self.reorder(load(data), strict=strict)
 
         def is_legacy_version(data):
             if 'version' not in data:
@@ -48,7 +62,7 @@ class ComposeFormat:
         return formatted.strip() + '\n'
 
     @staticmethod
-    def reorder(data):
+    def reorder(data, strict=True):
         if type(data) is dict or type(data) is OrderedDict:
             for key in ComposeFormat.ORDERS.keys():
                 if key not in data.keys():
@@ -57,19 +71,26 @@ class ComposeFormat:
 
                 def order(item):
                     key, _ = item
-                    assert key in current_order, 'key: {0} not known'.format(key)
+                    if strict:
+                        assert key in current_order, 'key: {0} not known'.format(key)
 
                     if key in current_order:
                         return current_order.index(key)
-                    return len(current_order)
+                    return len(current_order) + ComposeFormat.name_to_order(key)
 
-                result = {key: ComposeFormat.reorder(value) for key, value in data.items()}
+                result = {key: ComposeFormat.reorder(value, strict=strict) for key, value in data.items()}
                 result = OrderedDict(sorted(result.items(), key=order))
 
                 return result
-            return {key: ComposeFormat.reorder(value) for key, value in data.items()}
+            return {key: ComposeFormat.reorder(value, strict=strict) for key, value in data.items()}
         if type(data) is list:
-            return sorted([ComposeFormat.reorder(item) for item in data])
+            return sorted([ComposeFormat.reorder(item, strict=strict) for item in data])
         if len(str(data)) >= 1 and str(data)[0].isdigit():
             return '\'{}\''.format(data)
         return data
+
+    @staticmethod
+    def name_to_order(value):
+        from functools import reduce
+
+        return reduce(lambda left, right: (left * 256 + right), (ord(char) for char in value))

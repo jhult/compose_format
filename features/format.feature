@@ -169,3 +169,22 @@ Feature: Format
           ports:
             - '10000'
       """
+
+  Scenario: Alphabetic Order for unknown keys (--non_strict)
+    Given a file named "compose.yml" with:
+      """
+      foo:
+        image: bar
+        aaa: unknown
+        ccc: unknown
+        bbb: unknown
+      """
+    When I run `bin/compose_format --non_strict compose.yml`
+    Then it should pass with exactly:
+      """
+      foo:
+        image: bar
+        aaa: unknown
+        bbb: unknown
+        ccc: unknown
+      """
