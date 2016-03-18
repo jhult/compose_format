@@ -1,4 +1,3 @@
-@slow
 Feature: Format
   As a DevOps
   I want to have readable, formatted docker-compose files
