@@ -10,7 +10,7 @@ RUN \
 RUN pip install --no-cache-dir pyaml
 
 COPY bin /bin
-COPY compose_format /usr/local/lib/python3.5/site-packages/compose_format
+COPY compose_format /usr/lib/python3.5/site-packages/compose_format
 COPY ["features/*.feature", "Dockerfile", "README.md", "/"]
 
 RUN chmod +x /bin/compose_format
