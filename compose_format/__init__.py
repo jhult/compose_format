@@ -8,7 +8,7 @@ class ComposeFormat:
     TOPLEVEL_ORDER = ['version', 'services', 'volumes', 'networks']
     SERVICE_ORDER = [
         'image', 'command', 'entrypoint', 'container_name',
-        'links', 'volumes_from', 'volumes', 'volume_driver',
+        'links', 'volumes_from', 'volumes', 'volume_driver', 'tmpfs',
         'build',
         'expose', 'ports',
         'net', 'network_mode', 'networks',
