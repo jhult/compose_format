@@ -187,3 +187,22 @@ Feature: Format
         bbb: unknown
         ccc: unknown
       """
+
+  Scenario: Objects with Go Format Strings
+    Given a file named "compose.yml" with:
+      """
+      foo:
+        image: bar
+        logging:
+          options:
+            tag: "{{.Name}}"
+      """
+    When I run `bin/compose_format --non_strict compose.yml`
+    Then it should pass with exactly:
+      """
+      foo:
+        image: bar
+        logging:
+          options:
+            tag: '{{.Name}}'
+      """

@@ -87,6 +87,8 @@ class ComposeFormat:
             return sorted([ComposeFormat.reorder(item, strict=strict) for item in data])
         if len(str(data)) >= 1 and str(data)[0].isdigit():
             return '\'{0}\''.format(data)
+        if str(data).startswith('{'):
+            return '\'{0}\''.format(data)
         return data
 
     @staticmethod
