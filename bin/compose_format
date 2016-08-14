@@ -34,6 +34,6 @@ if __name__ == '__main__':
     for path in args.files:
         if not formatter.format(path, replace=args.replace, strict=not args.non_strict):
             if args.replace:
-                print('path {} has been changed'.format(path))
+                print('path {0} has been changed'.format(path))
             if not args.ignore_changes:
                 sys.exit(1)

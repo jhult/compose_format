@@ -29,7 +29,7 @@ class ComposeFormat:
     ORDERS = {
         'version': TOPLEVEL_ORDER,
         'image': SERVICE_ORDER,
-        'dockerfile': BUILD_ORDER
+        'dockerfile': BUILD_ORDER,
     }
 
     def __init__(self):
@@ -58,7 +58,7 @@ class ComposeFormat:
 
         vspacing = [1, 0] if is_legacy_version(data) else [0, 1, 0]
 
-        formatted = pyaml.dump(data, vspacing=vspacing, indent=2, width=120, string_val_style='plain')
+        formatted = pyaml.dump(data, vspacing=vspacing, indent=2, width=119, string_val_style='plain')
         return formatted.strip() + '\n'
 
     @staticmethod
@@ -86,7 +86,7 @@ class ComposeFormat:
         if type(data) is list:
             return sorted([ComposeFormat.reorder(item, strict=strict) for item in data])
         if len(str(data)) >= 1 and str(data)[0].isdigit():
-            return '\'{}\''.format(data)
+            return '\'{0}\''.format(data)
         return data
 
     @staticmethod
