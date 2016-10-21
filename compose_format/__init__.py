@@ -58,7 +58,7 @@ class ComposeFormat:
 
         vspacing = [1, 0] if is_legacy_version(data) else [0, 1, 0]
 
-        formatted = pyaml.dump(data, vspacing=vspacing, indent=2, width=119, string_val_style='plain')
+        formatted = pyaml.dump(data, vspacing=vspacing, indent=2, width=110, string_val_style='plain')
         return formatted.strip() + '\n'
 
     @staticmethod
