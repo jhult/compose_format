@@ -5,10 +5,30 @@
 [![Docker pulls](https://img.shields.io/docker/pulls/funkwerk/compose_format.svg)](https://hub.docker.com/r/funkwerk/compose_format/)
 # compose_format
 
-Format docker-compose files.
+Format docker-compose files by distilling docker compose best practices into this tool.
+
+## Docker Compose Files are complex
+
+Docker Compose Files could be rather complex.
+If these files are complex, there are multiple ways to write the same thing.
+If there are multiple ways to format these files, these multiple ways will be used.
+Means that it will be not possible to diff your files, cause everybody writes them a bit different.
+
+## Alphabetical order vs. custom order
+
+Sorting would be easy, if everything could be sorted alphabetically.
+But in compose files the first thing mentioned for a service is the `image`.
+`compose_format` aims to distill these compose format best practices into a tool.
+
+## Comments
+
+Usually formatting tools destroy comments. But comments contain valueable TODO-markers or other hints.
+`compose_format` putted effort into supporting comments.
+
+## Support
 
 Note that this small utility is just valid until docker-compose has itself a format functionality.
-Currently docker-compose just support the "config" switch. Which joins multiple compose files and print them in a machine readable form.
+Currently docker-compose just support the "config" switch. Which joins multiple compose files and print them in a machine-readable form.
 
 ## Usage
 
@@ -29,7 +49,14 @@ Use it like:
 `cat docker-compose.yml | docker run -i funkwerk/compose_format`
 
 ## Features
- - Support for Version 2 and Version 1.
+ - Support for Version 3, 2.1, 2, and 1.
+ - Support for Comments
  - Orders Services, Volumes, Networks
  - Orders Definitions
  - Orders Port and Volume Lists
+
+## Contribution
+
+Feel free to add issues or provide Pull Requests.
+Especially when the order in some points violates the best practices.
+This tool should be changed based on the evolving best practices.
