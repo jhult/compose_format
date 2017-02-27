@@ -7,7 +7,7 @@ RUN \
   wget "https://bootstrap.pypa.io/get-pip.py" -O /dev/stdout | python3 && \
   apk del build-dependencies
 
-RUN pip install --no-cache-dir pyaml
+RUN pip install --no-cache-dir ruamel.yaml
 
 COPY bin /bin
 COPY compose_format /usr/lib/python3.5/site-packages/compose_format
