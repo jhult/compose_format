@@ -29,7 +29,6 @@ Feature: Format
       """
       version: '2'
       services:
-
         foo:
           image: bar
       """
@@ -53,16 +52,12 @@ Feature: Format
       """
       version: '2'
       services:
-
         a_service:
           image: image
-
         b_service:
           image: image
-
         c_service:
           image: image
-
         d_service:
           image: image
       """
@@ -103,12 +98,11 @@ Feature: Format
       """
       version: '2'
       services:
-
         service:
           image: image
           ports:
-            - '1'
-            - '2'
+          - '1'
+          - '2'
       """
 
   Scenario: Service Member Order
@@ -134,7 +128,6 @@ Feature: Format
       """
       version: '2'
       services:
-
         foo:
           image: not_relevant
           command: not_relevant
@@ -147,26 +140,6 @@ Feature: Format
           restart: not_relevant
           ulimits: not_relevant
           tty: not_relevant
-      """
-
-  Scenario: Stringify Numbers
-    Given a file named "compose.yml" with:
-      """
-      version: 2
-      services:
-        foo:
-          ports:
-            - 10000
-      """
-    When I run `bin/compose_format compose.yml`
-    Then it should pass with exactly:
-      """
-      version: '2'
-      services:
-
-        foo:
-          ports:
-            - '10000'
       """
 
   Scenario: Alphabetic Order for unknown keys (--non_strict)

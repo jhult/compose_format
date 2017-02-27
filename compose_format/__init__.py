@@ -1,7 +1,5 @@
-#!/usr/bin/env python3
-from collections import OrderedDict
-import pyaml
-from yaml import load
+from ruamel.yaml import RoundTripDumper, RoundTripLoader, dump, load
+from ruamel.yaml.comments import CommentedMap, CommentedSeq
 
 
 class ComposeFormat:
@@ -12,9 +10,11 @@ class ComposeFormat:
         'build',
         'expose', 'ports',
         'net', 'network_mode', 'networks',
+        'deploy',
         'labels',
         'devices',
         'read_only',
+        'healthcheck',
         'env_file', 'environment',
         'cpu_shares', 'cpu_quota', 'cpuset', 'domainname', 'hostname', 'ipc',
         'mac_address', 'mem_limit', 'memswap_limit', 'privileged',
@@ -22,15 +22,40 @@ class ComposeFormat:
         'stdin_open', 'user', 'working_dir',
         'extra_hosts', 'restart', 'ulimits', 'tty', 'dns', 'dns_search', 'pid',
         'security_opt', 'cap_add', 'cap_drop', 'cgroup_parent', 'logging', 'log_driver', 'log_opt',
-        'stopsignal',
+        'stopsignal', 'stop_signal', 'stop_grace_period',
+        'sysctls', 'userns_mode',
+        'autodestroy', 'autoredeploy',
+        'deployment_strategy', 'sequential_deployment', 'tags', 'target_num_containers',
+        'roles',
+    ]
+    DEPLOY_ORDER = [
+        'placement', 'replicas', 'mode',
+        'update_config',
+        'resources',
+        'restart_policy',
+        'labels',
+    ]
+    HEALTHCHECK_ORDER = [
+        'test',
+        'interval', 'timeout', 'retries',
+        'disable',
     ]
     BUILD_ORDER = ['context', 'dockerfile', 'args']
 
     ORDERS = {
         'version': TOPLEVEL_ORDER,
+        'services': TOPLEVEL_ORDER,
         'image': SERVICE_ORDER,
         'dockerfile': BUILD_ORDER,
+        'placement': DEPLOY_ORDER,
+        'replicas': DEPLOY_ORDER,
+        'test': HEALTHCHECK_ORDER,
     }
+    NON_SORTABLE_ARRAYS = [
+        'entrypoint',
+        'command',
+        'test',
+    ]
 
     def __init__(self):
         pass
@@ -49,47 +74,55 @@ class ComposeFormat:
         return original == formatted
 
     def format_string(self, data, replace=False, strict=True):
-        data = self.reorder(load(data), strict=strict)
+        data = self.reorder(load(data, RoundTripLoader), strict=strict)
+        formatted = dump(data, Dumper=RoundTripDumper, indent=2, width=120)
 
-        def is_legacy_version(data):
-            if 'version' not in data:
-                return True
-            return str(data['version']) != '2' and str(data['version']) != '\'2\''
-
-        vspacing = [1, 0] if is_legacy_version(data) else [0, 1, 0]
-
-        formatted = pyaml.dump(data, vspacing=vspacing, indent=2, width=110, string_val_style='plain')
         return formatted.strip() + '\n'
 
     @staticmethod
     def reorder(data, strict=True):
-        if type(data) is dict or type(data) is OrderedDict:
-            for key in ComposeFormat.ORDERS.keys():
-                if key not in data.keys():
+        if type(data) is CommentedMap:
+            order = ComposeFormat.order_map(list(data.keys()))
+            keys = list(data.keys())
+
+            while ComposeFormat.sorted_by_order(keys, order, strict) != keys:
+                for a, b in zip(ComposeFormat.sorted_by_order(keys, order, strict), keys):
+                    if a == b:
+                        continue
+                    data.move_to_end(b)
+                    break
+                keys = list(data.keys())
+            for key, item in data.items():
+                if key in ComposeFormat.NON_SORTABLE_ARRAYS:
                     continue
-                current_order = ComposeFormat.ORDERS[key]
-
-                def order(item):
-                    key, _ = item
-                    if strict:
-                        assert key in current_order, 'key: {0} not known'.format(key)
-
-                    if key in current_order:
-                        return current_order.index(key)
-                    return len(current_order) + ComposeFormat.name_to_order(key)
-
-                result = {key: ComposeFormat.reorder(value, strict=strict) for key, value in data.items()}
-                result = OrderedDict(sorted(result.items(), key=order))
-
-                return result
-            return {key: ComposeFormat.reorder(value, strict=strict) for key, value in data.items()}
-        if type(data) is list:
-            return sorted([ComposeFormat.reorder(item, strict=strict) for item in data])
-        if len(str(data)) >= 1 and str(data)[0].isdigit():
-            return '\'{0}\''.format(data)
-        if str(data).startswith('{'):
-            return '\'{0}\''.format(data)
+                ComposeFormat.reorder(item, strict)
+            return data
+        if type(data) is CommentedSeq:
+            data.sort()
+            return data
         return data
+
+    @staticmethod
+    def order_map(keys):
+        for key in ComposeFormat.ORDERS.keys():
+            if key in keys:
+                return ComposeFormat.ORDERS[key]
+        return None
+
+    @staticmethod
+    def sorted_by_order(keys, order, strict):
+        if order is None:
+            return sorted(keys)
+
+        def order_function(key):
+            if strict:
+                assert key in order, 'key: {0} not known'.format(key)
+
+            if key in order:
+                return order.index(key)
+            return len(order) + ComposeFormat.name_to_order(key)
+
+        return sorted(keys, key=order_function)
 
     @staticmethod
     def name_to_order(value):

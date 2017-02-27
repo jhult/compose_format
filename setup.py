@@ -7,14 +7,14 @@ def readme():
 
 setup(
     name='compose_format',
-    version='0.2.1',
+    version='1.0.0',
     description='format docker-compose files',
     long_description=readme(),
     url='http://github.com/funkwerk/compose_format',
     author='Stefan Rohe',
     license='MIT',
     packages=['compose_format'],
-    install_requires=['pyaml'],
+    install_requires=['ruamel.pyaml'],
     zip_safe=False,
     classifiers=[
         'License :: OSI Approved :: MIT License',
