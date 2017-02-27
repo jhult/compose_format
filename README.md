@@ -5,7 +5,7 @@
 [![Docker pulls](https://img.shields.io/docker/pulls/funkwerk/compose_format.svg)](https://hub.docker.com/r/funkwerk/compose_format/)
 # compose_format
 
-Format docker-compose files by distilling docker compose best practices into this tool.
+Formats docker-compose files by using the distilled docker compose best practices.
 
 ## Docker Compose Files are complex
 
