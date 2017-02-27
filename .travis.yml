@@ -6,5 +6,5 @@ python:
   - "3.5-dev"
 before_install:
  - bundle install
-install: "pip install ruamel.pyaml flake8 pylint"
+install: "pip install ruamel.yaml flake8 pylint"
 script: "rake test"
