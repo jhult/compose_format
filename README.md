@@ -1,7 +1,9 @@
 [![Build Status](https://travis-ci.org/funkwerk/compose_format.svg)](https://travis-ci.org/funkwerk/compose_format)
 [![](https://badge.imagelayers.io/funkwerk/compose_format.svg)](https://imagelayers.io/?images=funkwerk/compose_format:latest 'funkwerk/compose_format')
+[![Docker Build](https://img.shields.io/docker/automated/funkwerk/compose_format.svg)](https://hub.docker.com/r/funkwerk/compose_format/)
 [![PyPi version](https://img.shields.io/pypi/v/compose_format.svg)](https://pypi.python.org/pypi/compose_format/)
 [![Docker pulls](https://img.shields.io/docker/pulls/funkwerk/compose_format.svg)](https://hub.docker.com/r/funkwerk/compose_format/)
+
 # compose_format
 
 Formats docker-compose files by using the distilled docker compose best practices.
