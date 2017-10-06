@@ -17,7 +17,7 @@ class ComposeFormat:
         'healthcheck',
         'env_file', 'environment',
         'cpu_shares', 'cpu_quota', 'cpuset', 'domainname', 'hostname', 'ipc',
-        'mac_address', 'mem_limit', 'memswap_limit', 'privileged',
+        'mac_address', 'mem_limit', 'memswap_limit', 'privileged', 'shm_size',
         'depends_on', 'extends', 'external_links',
         'stdin_open', 'user', 'working_dir',
         'extra_hosts', 'restart', 'ulimits', 'tty', 'dns', 'dns_search', 'pid',
