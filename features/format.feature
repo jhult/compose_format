@@ -179,3 +179,30 @@ Feature: Format
           options:
             tag: '{{.Name}}'
       """
+
+  Scenario: Sexadecimal Number Support
+    Given a file named "compose.yml" with:
+      """
+      version: "2"
+      services:
+        service:
+          image: image
+          ports:
+            - '10'
+            - '59:59'
+            - 60:60
+            - 61:61
+      """
+    When I run `bin/compose_format compose.yml`
+    Then it should pass with exactly:
+      """
+      version: '2'
+      services:
+        service:
+          image: image
+          ports:
+          - '10'
+          - '59:59'
+          - '60:60'
+          - 61:61
+      """
