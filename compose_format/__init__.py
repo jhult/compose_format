@@ -1,5 +1,6 @@
 from ruamel.yaml import RoundTripDumper, RoundTripLoader, dump, load
 from ruamel.yaml.comments import CommentedMap, CommentedSeq
+from ruamel.yaml.scalarstring import SingleQuotedScalarString
 
 
 class ComposeFormat:
@@ -98,9 +99,21 @@ class ComposeFormat:
                 ComposeFormat.reorder(item, strict)
             return data
         if type(data) is CommentedSeq:
+            for i, value in enumerate(data):
+                data[i] = ComposeFormat.fix_sexadecimal_numbers(value)
             data.sort()
             return data
         return data
+
+    @staticmethod
+    def fix_sexadecimal_numbers(value):
+        import re
+
+        SEXADECIMAL_NUMBER = '(?P<left>\d+):(?P<right>\d+)'
+        match = re.match(SEXADECIMAL_NUMBER, value)
+        if not match or int(match.group('left')) > 60 or int(match.group('right')) > 60:
+            return value
+        return SingleQuotedScalarString('{0}:{1}'.format(match.group('left'), match.group('right')))
 
     @staticmethod
     def order_map(keys):
