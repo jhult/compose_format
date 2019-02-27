@@ -15,7 +15,7 @@ setup(
     author='Stefan Rohe',
     license='MIT',
     packages=['compose_format'],
-    install_requires=['ruamel.yaml'],
+    install_requires=['ruamel.yaml<=0.15.86'],
     zip_safe=False,
     classifiers=[
         'License :: OSI Approved :: MIT License',
