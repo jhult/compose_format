@@ -100,7 +100,8 @@ class ComposeFormat:
             return data
         if type(data) is CommentedSeq:
             for i, value in enumerate(data):
-                data[i] = ComposeFormat.fix_sexadecimal_numbers(value)
+                if type(value) is not CommentedMap:
+                    data[i] = ComposeFormat.fix_sexadecimal_numbers(value)
             data.sort()
             return data
         return data
@@ -108,7 +109,6 @@ class ComposeFormat:
     @staticmethod
     def fix_sexadecimal_numbers(value):
         import re
-
         SEXADECIMAL_NUMBER = '(?P<left>\d+):(?P<right>\d+)'
         match = re.match(SEXADECIMAL_NUMBER, value)
         if not match or int(match.group('left')) > 60 or int(match.group('right')) > 60:
