@@ -109,6 +109,7 @@ class ComposeFormat:
     @staticmethod
     def fix_sexadecimal_numbers(value):
         import re
+
         SEXADECIMAL_NUMBER = '(?P<left>\d+):(?P<right>\d+)'
         match = re.match(SEXADECIMAL_NUMBER, value)
         if not match or int(match.group('left')) > 60 or int(match.group('right')) > 60:
