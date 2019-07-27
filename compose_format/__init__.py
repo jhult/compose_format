@@ -101,7 +101,8 @@ class ComposeFormat:
             return data
         if type(data) is CommentedSeq:
             for i, value in enumerate(data):
-                data[i] = ComposeFormat.fix_sexadecimal_numbers(value)
+                if type(value) is not CommentedMap:
+                    data[i] = ComposeFormat.fix_sexadecimal_numbers(value)
             data.sort()
             return data
         return data
