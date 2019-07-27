@@ -4,7 +4,7 @@ from ruamel.yaml.scalarstring import SingleQuotedScalarString
 
 
 class ComposeFormat:
-    TOPLEVEL_ORDER = ['version', 'services', 'volumes', 'networks']
+    TOPLEVEL_ORDER = ['version', 'services', 'volumes', 'networks', 'secrets']
     SERVICE_ORDER = [
         'image', 'command', 'entrypoint', 'container_name',
         'links', 'volumes_from', 'volumes', 'volume_driver', 'tmpfs',
@@ -17,6 +17,7 @@ class ComposeFormat:
         'read_only',
         'healthcheck',
         'env_file', 'environment',
+        'secrets',
         'cpu_shares', 'cpu_quota', 'cpuset', 'domainname', 'hostname', 'ipc',
         'mac_address', 'mem_limit', 'memswap_limit', 'privileged', 'shm_size',
         'depends_on', 'extends', 'external_links',
