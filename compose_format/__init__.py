@@ -77,7 +77,8 @@ class ComposeFormat:
 
     def format_string(self, data, replace=False, strict=True):
         data = self.reorder(load(data, RoundTripLoader), strict=strict)
-        formatted = dump(data, Dumper=RoundTripDumper, indent=2, width=120)
+        formatted = dump(data, Dumper=RoundTripDumper,
+                         indent=2, block_seq_indent=2, width=120)
 
         return formatted.strip() + '\n'
 
