@@ -1,4 +1,4 @@
-FROM alpine:3.10
+FROM alpine:3.11
 MAINTAINER think@hotmail.de
 
 ENV PYTHONUNBUFFERED=1
@@ -14,7 +14,7 @@ RUN \
 RUN pip install --no-cache-dir ruamel.yaml
 
 COPY bin /bin
-COPY compose_format /usr/lib/python3.7/site-packages/compose_format
+COPY compose_format /usr/lib/python3.8/site-packages/compose_format
 
 RUN chmod +x /bin/compose_format
 
