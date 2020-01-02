@@ -43,7 +43,6 @@ class ComposeFormat:
         'disable',
     ]
     BUILD_ORDER = ['context', 'dockerfile', 'target', 'args']
-
     ORDERS = {
         'version': TOPLEVEL_ORDER,
         'services': TOPLEVEL_ORDER,
